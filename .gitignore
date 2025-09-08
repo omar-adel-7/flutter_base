@@ -1,0 +1,5 @@
+# Flutter/Dart related
+.dart_tool/
+.flutter-plugins-dependencies
+# IDEs
+.idea/
