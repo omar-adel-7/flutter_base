@@ -86,7 +86,7 @@ class MyAudioManager extends AudioPlayerHandler {
     String appNoInternetMessage,
   ) async {
     await stop();
-    bool hasNetwork = await InternetConnectionChecker().hasConnection;
+    bool hasNetwork = await InternetConnectionChecker.instance.hasConnection;
     if (!audioFile.isLocal && !hasNetwork) {
       ToastManger.showToast(appNoInternetMessage);
     } else {
