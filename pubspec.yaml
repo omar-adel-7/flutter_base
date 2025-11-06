@@ -13,18 +13,18 @@ dependencies:
   flutter:
     sdk: flutter
 
-  get_it: ^8.0.3
+  get_it: ^9.0.5
   flutter_bloc: ^9.1.1
-  sqflite_sqlcipher: ^3.1.0+1
+  sqflite_sqlcipher: ^3.4.0
   shared_preferences: ^2.5.3
   hive_flutter: ^1.1.0
-  internet_connection_checker: ^1.0.0+1
+  internet_connection_checker: ^3.0.1
   rxdart: ^0.28.0
-  just_audio: ^0.10.4
+  just_audio: ^0.10.5
   audio_service: ^0.18.18
-  flutter_widget_from_html_core: ^0.15.2
-  fluttertoast: ^8.2.12
-  wakelock_plus: ^1.2.10
+  flutter_widget_from_html_core: ^0.17.0
+  fluttertoast: ^9.0.0
+  wakelock_plus: ^1.4.0
   downloader:
     git:
       url: https://github.com/omar-adel-7/FlutterDownloader.git
@@ -38,7 +38,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^4.0.0
+  flutter_lints: ^6.0.0
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
