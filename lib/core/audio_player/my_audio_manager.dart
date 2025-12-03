@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:flutter_base/BaseConfiguration.dart';
 import 'package:flutter_base/core/audio_player/audio_util.dart';
@@ -12,8 +11,6 @@ import 'package:flutter_base/core/utils/toast_manager.dart';
 import 'package:flutter_base/data/repositories/base_local_database_repository.dart';
 import 'audio_player_handler.dart';
 import 'model/audio_file.dart';
-import 'model/my_player_state.dart';
-import 'model/my_processing_state.dart';
 import 'model/player_position.dart';
 
 const String playerNotificationIconName = 'audio_notification_big_icon.png';
@@ -86,7 +83,7 @@ class MyAudioManager extends AudioPlayerHandler {
     String appNoInternetMessage,
   ) async {
     await stop();
-    bool hasNetwork = await InternetConnectionChecker.instance.hasConnection;
+    bool hasNetwork = await hasRealInternet();
     if (!audioFile.isLocal && !hasNetwork) {
       ToastManger.showToast(appNoInternetMessage);
     } else {

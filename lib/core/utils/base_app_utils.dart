@@ -3,12 +3,8 @@ import 'dart:io';
 import 'package:downloader/download_args.dart';
 import 'package:downloader/downloader_plugin.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:http/http.dart';
 import 'package:path/path.dart';
-import 'package:flutter_base/core/extension/base_extensions.dart';
-import 'BaseConstants.dart';
-
 
 String joinParts(
   String part1, [
@@ -79,6 +75,40 @@ String replaceArabicNumber(String input) {
   return input;
 }
 
+bool isFileExist({
+  required String destinationDirPath,
+  required String fileName,
+}) {
+  return DownloaderPlugin.isFileExist(
+    destinationDirPath: destinationDirPath,
+    fileName: fileName,
+  );
+}
+
+bool isFileByArgsExist(DownloadArgs downloadArgs) {
+  return DownloaderPlugin.isFileByArgsExist(downloadArgs);
+}
+
+Future<bool> hasRealInternet() async {
+  try {
+    final response = await get(
+      Uri.parse("https://clients3.google.com/generate_204"),
+    ).timeout(const Duration(milliseconds: 1500));
+    return response.statusCode == 204;
+  } catch (_) {
+    return false;
+  }
+}
+
+bool isPlatformAndroid() {
+  return Platform.isAndroid;
+}
+
+bool isPlatformIos() {
+  return Platform.isIOS;
+}
+
+
 customLog(Object? object) {
   if (kDebugMode) {
     String text = "$object";
@@ -97,26 +127,4 @@ customBaseLog(Object? object) {
   //       .allMatches(text)
   //       .forEach((match) => print("DebugPrintStatement : ${match.group(0)}"));
   // }
-}
-
-bool isFileExist({
-  required String destinationDirPath,
-  required String fileName,
-}) {
-  return DownloaderPlugin.isFileExist(
-    destinationDirPath: destinationDirPath,
-    fileName: fileName,
-  );
-}
-
-bool isFileByArgsExist(DownloadArgs downloadArgs) {
-  return DownloaderPlugin.isFileByArgsExist(downloadArgs);
-}
-
-bool isPlatformAndroid() {
-  return Platform.isAndroid;
-}
-
-bool isPlatformIos() {
-  return Platform.isIOS;
 }

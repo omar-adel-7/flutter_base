@@ -18,13 +18,13 @@ dependencies:
   sqflite_sqlcipher: ^3.4.0
   shared_preferences: ^2.5.3
   hive_flutter: ^1.1.0
-  internet_connection_checker: ^3.0.1
   rxdart: ^0.28.0
   just_audio: ^0.10.5
   audio_service: ^0.18.18
   flutter_widget_from_html_core: ^0.17.0
   fluttertoast: ^9.0.0
   wakelock_plus: ^1.4.0
+  http: ^1.6.0
   downloader:
     git:
       url: https://github.com/omar-adel-7/FlutterDownloader.git
