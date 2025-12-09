@@ -289,16 +289,19 @@ extension BaseBuildContextBottomSheetExtension on BuildContext {
       backgroundColor: backgroundColor,
       shape: shape,
       context: this,
-      builder: (BuildContext context) => Padding(
-        padding: MediaQuery.viewInsetsOf(context),
-        child: useFraction
-            ? FractionSizeBox(
-                portraitHeightFactor: portraitHeightFactor,
-                landscapeHeightFactor: landscapeHeightFactor,
-                isLandscapeTabletHeightSmall: isLandscapeTabletHeightSmall,
-                widget: widget,
-              )
-            : widget,
+      builder: (BuildContext context) => SafeArea(
+        top: false,
+        child: Padding(
+          padding: MediaQuery.viewInsetsOf(context),
+          child: useFraction
+              ? FractionSizeBox(
+            portraitHeightFactor: portraitHeightFactor,
+            landscapeHeightFactor: landscapeHeightFactor,
+            isLandscapeTabletHeightSmall: isLandscapeTabletHeightSmall,
+            widget: widget,
+          )
+              : widget,
+        ),
       ),
       useRootNavigator: useRootNavigator,
       isScrollControlled: true,
