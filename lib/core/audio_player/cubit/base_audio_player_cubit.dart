@@ -29,6 +29,8 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
   double speed = 1;
 
 
+  ValueNotifier<AudioFile?> get currentAudioFileNotifier =>
+      myAudioManager.currentAudioFileNotifier;
 
   ValueNotifier<MyPlayerState> get playerStateNotifier =>
       myAudioManager.playerStateNotifier;

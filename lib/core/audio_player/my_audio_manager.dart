@@ -102,11 +102,12 @@ class MyAudioManager extends AudioPlayerHandler {
           : AudioSource.uri(Uri.parse(audioFile.sourcePath), tag: mediaItemId);
       try {
         await audioPlayer.setAudioSource(audioSource);
+        currentAudioFileNotifier.value=audioFile;
+        play();
+        await seek(Duration(milliseconds: audioFile.initPosition.inMilliseconds));
       } catch (e) {
         customBaseLog('MyPlayerError occured: $e');
       }
-      play();
-      await seek(Duration(milliseconds: audioFile.initPosition.inMilliseconds));
     }
   }
 

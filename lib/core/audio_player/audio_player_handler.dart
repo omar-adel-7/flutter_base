@@ -5,6 +5,7 @@ import 'package:flutter_base/BaseConfiguration.dart';
 import 'package:flutter_base/core/utils/base_app_utils.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'model/audio_file.dart';
 import 'model/my_player_state.dart';
 import 'model/my_processing_state.dart';
 import 'model/player_position.dart';
@@ -12,6 +13,10 @@ import 'model/player_position.dart';
 /// An [AudioHandler] for playing a single item.
 class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   final audioPlayer = AudioPlayer();
+
+  final ValueNotifier<AudioFile?> currentAudioFileNotifier = ValueNotifier(
+    null,
+  );
 
   final playerStateNotifier = ValueNotifier<MyPlayerState>(
     MyPlayerState(false, MyProcessingState.idle),
@@ -133,6 +138,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
       const Duration(),
       const Duration(),
     );
+    currentAudioFileNotifier.value = null;
   }
 
   Future<void> shuffle() async {
@@ -218,5 +224,4 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   bool get isLoadingOrBuffering {
     return playerStateNotifier.value.isLoadingOrBuffering;
   }
-
 }
