@@ -7,12 +7,13 @@ class AudioFile {
   final Duration lastPosition;
   final Duration totalDuration;
 
-  AudioFile(
-      {required this.id,
-      required this.title,
-      required this.sourcePath,
-      required this.isLocal,
-      this.initPosition = Duration.zero,
-      this.lastPosition = Duration.zero,
-      required this.totalDuration});
+  AudioFile({
+    required this.id,
+    required this.title,
+    required this.sourcePath,
+    required this.isLocal,
+    this.initPosition = Duration.zero,
+    this.lastPosition = Duration.zero,
+    this.totalDuration = Duration.zero,
+  });
 }
