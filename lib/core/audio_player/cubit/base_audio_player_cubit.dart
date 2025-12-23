@@ -27,7 +27,6 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
   int playSpeed = 1;
   double speed = 1;
 
-
   ValueNotifier<AudioFile?> get currentAudioFileNotifier =>
       myBaseAudioManager.currentAudioFileNotifier;
 
@@ -41,15 +40,12 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
     loadSetting();
   }
 
-  void loadSetting() {
-
-  }
+  void loadSetting() {}
 
   savePlayerSettings({
     required BuildContext context,
     required bool willPlay,
   }) async {
-
     emitPlayerSettingsChangeAndPlayIfWanted(context, willPlay);
   }
 
@@ -65,9 +61,7 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
     }
   }
 
-  startPlaying(BuildContext context) {
-
-  }
+  startPlaying(BuildContext context) {}
 
   seekSecondsPrevious() {
     myBaseAudioManager.rewind();
@@ -76,7 +70,6 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
   seekSecondsForward() {
     myBaseAudioManager.fastForward();
   }
-
 
   String? get currentItemId {
     return myBaseAudioManager.currentItemId;
@@ -98,26 +91,30 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
 
   Future<void> playOtherSoundOrPauseOrStop(
     AudioFile audioFile,
-    String notificationTitle,
-    String appNoInternetMessage,
-  ) async {
+    String appNotificationTitle,
+    String appNoInternetMessage, {
+    List<AudioFile>? mediaList,
+    int? playIndex,
+  }) async {
     customBaseLog(
       "playOtherSound audioFile sourcePath = ${audioFile.sourcePath}",
     );
-      if (audioFile.id == currentItemId) {
-        if (isPlaying) {
-          await myBaseAudioManager.pause();
-          //await stopSound();
-        } else if (isPaused) {
-          myBaseAudioManager.resume();
-        }
-      } else {
-        await myBaseAudioManager.playOtherSound(
-          audioFile,
-          notificationTitle,
-          appNoInternetMessage,
-        );
+    if (audioFile.id == currentItemId) {
+      if (isPlaying) {
+        await myBaseAudioManager.pause();
+        //await stopSound();
+      } else if (isPaused) {
+        myBaseAudioManager.resume();
       }
+    } else {
+      await myBaseAudioManager.playOtherSound(
+        audioFile,
+        appNotificationTitle,
+        appNoInternetMessage,
+        mediaList: mediaList,
+        playIndex: playIndex,
+      );
+    }
   }
 
   play() async {
@@ -127,7 +124,6 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
   pause() async {
     await myBaseAudioManager.pause();
   }
-
 
   playNextSound() async {
     await myBaseAudioManager.skipToNext();

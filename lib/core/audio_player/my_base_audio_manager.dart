@@ -43,8 +43,10 @@ Future<MyBaseAudioManager> initAudioService(
     playerNotificationIconPath: playerNotificationIconPath,
   );
   return await AudioService.init(
-    builder: () =>
-        MyBaseAudioManager(baseLocalDatabaseRepository, playerNotificationIconPath),
+    builder: () => MyBaseAudioManager(
+      baseLocalDatabaseRepository,
+      playerNotificationIconPath,
+    ),
     config: AudioServiceConfig(
       preloadArtwork: true,
       androidNotificationChannelId:
@@ -69,6 +71,10 @@ class MyBaseAudioManager extends AudioPlayerHandler {
   late BaseLocalDatabaseRepository baseLocalDatabaseRepository;
 
   AudioUtil audioUtil = AudioUtil();
+  String appNotificationTitle = '';
+  String appNoInternetMessage = '';
+  List<AudioFile> mediaList = [];
+  int playIndex = -1;
 
   MyBaseAudioManager(
     this.baseLocalDatabaseRepository,
@@ -80,20 +86,34 @@ class MyBaseAudioManager extends AudioPlayerHandler {
 
   playOtherSound(
     AudioFile audioFile,
-    String notificationTitle,
-    String appNoInternetMessage,
-  ) async {
+    String appNotificationTitle,
+    String appNoInternetMessage, {
+    List<AudioFile>? mediaList,
+    int? playIndex,
+  }) async {
+    this.appNotificationTitle = appNotificationTitle;
+    this.appNoInternetMessage = appNoInternetMessage;
     await stop();
+    if (mediaList != null) {
+      this.mediaList = mediaList;
+      if (playIndex != null) {
+        this.playIndex = playIndex;
+      }
+    }
+    playOtherSoundWork(audioFile);
+  }
+
+  Future<void> playOtherSoundWork(AudioFile audioFile) async {
     bool hasNetwork = await hasRealInternet();
     if (!audioFile.isLocal && !hasNetwork) {
-      ToastManger.showToast(appNoInternetMessage);
+      ToastManger.showToast(this.appNoInternetMessage);
     } else {
       String artUri = getPlayerNotificationBigIconPath();
       String mediaItemId = audioFile.id;
       mediaItem.add(
         MediaItem(
           id: mediaItemId,
-          album: notificationTitle,
+          album: this.appNotificationTitle,
           title: audioFile.title,
           artUri: Uri.file(artUri),
         ),
@@ -103,9 +123,11 @@ class MyBaseAudioManager extends AudioPlayerHandler {
           : AudioSource.uri(Uri.parse(audioFile.sourcePath), tag: mediaItemId);
       try {
         await audioPlayer.setAudioSource(audioSource);
-        currentAudioFileNotifier.value=audioFile;
+        currentAudioFileNotifier.value = audioFile;
         play();
-        await seek(Duration(milliseconds: audioFile.initPosition.inMilliseconds));
+        await seek(
+          Duration(milliseconds: audioFile.initPosition.inMilliseconds),
+        );
       } catch (e) {
         customBaseLog('MyPlayerError occured: $e');
       }
@@ -130,6 +152,36 @@ class MyBaseAudioManager extends AudioPlayerHandler {
 
   Future<void> callBaseSeek(Duration position) async {
     await super.seek(position);
+  }
+
+  @override
+  Future<void> skipToNext() async {
+    customLog('MyBaseAudioManager skipToNext');
+    if (mediaList.isNotEmpty) {
+      if (playIndex + 1 != mediaList.length) {
+        playIndex++;
+      } else {
+        playIndex = 0;
+      }
+      playPlayListMedia();
+    }
+  }
+
+  @override
+  Future<void> skipToPrevious() async {
+    if (mediaList.isNotEmpty) {
+      if (playIndex - 1 >= 0) {
+        playIndex--;
+      } else {
+        playIndex = mediaList.length - 1;
+      }
+      playPlayListMedia();
+    }
+  }
+
+  void playPlayListMedia() async {
+    await stop();
+    playOtherSoundWork(mediaList[playIndex]);
   }
 
   @override
