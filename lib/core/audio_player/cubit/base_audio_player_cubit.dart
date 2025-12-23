@@ -13,7 +13,7 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
   static BaseAudioPlayerCubit get(context) => BlocProvider.of(context);
 
   BaseAudioPlayerCubit({
-    required this.myAudioManager,
+    required this.myBaseAudioManager,
     required this.baseHiveStore,
     required this.baseLocalDatabaseRepository,
   }) : super(AudioPlayerInitialState()) {
@@ -21,7 +21,7 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
   }
 
   final BaseHiveStore baseHiveStore;
-  final MyBaseAudioManager myAudioManager;
+  final MyBaseAudioManager myBaseAudioManager;
   final BaseLocalDatabaseRepository baseLocalDatabaseRepository;
 
   int playSpeed = 1;
@@ -29,13 +29,13 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
 
 
   ValueNotifier<AudioFile?> get currentAudioFileNotifier =>
-      myAudioManager.currentAudioFileNotifier;
+      myBaseAudioManager.currentAudioFileNotifier;
 
   ValueNotifier<MyPlayerState> get playerStateNotifier =>
-      myAudioManager.playerStateNotifier;
+      myBaseAudioManager.playerStateNotifier;
 
   ValueNotifier<PlayerPosition> get playerPositionNotifier =>
-      myAudioManager.playerPositionNotifier;
+      myBaseAudioManager.playerPositionNotifier;
 
   void initialize() {
     loadSetting();
@@ -70,31 +70,31 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
   }
 
   seekSecondsPrevious() {
-    myAudioManager.rewind();
+    myBaseAudioManager.rewind();
   }
 
   seekSecondsForward() {
-    myAudioManager.fastForward();
+    myBaseAudioManager.fastForward();
   }
 
 
   String? get currentItemId {
-    return myAudioManager.currentItemId;
+    return myBaseAudioManager.currentItemId;
   }
 
   bool get isPlayerExist {
-    return myAudioManager.isPlayerExist;
+    return myBaseAudioManager.isPlayerExist;
   }
 
   bool get isPlaying {
-    return myAudioManager.isPlaying;
+    return myBaseAudioManager.isPlaying;
   }
 
   bool get isPaused {
-    return myAudioManager.isPaused;
+    return myBaseAudioManager.isPaused;
   }
 
-  bool get isLoadingOrBuffering => myAudioManager.isLoadingOrBuffering;
+  bool get isLoadingOrBuffering => myBaseAudioManager.isLoadingOrBuffering;
 
   Future<void> playOtherSoundOrPauseOrStop(
     AudioFile audioFile,
@@ -106,13 +106,13 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
     );
       if (audioFile.id == currentItemId) {
         if (isPlaying) {
-          await myAudioManager.pause();
+          await myBaseAudioManager.pause();
           //await stopSound();
         } else if (isPaused) {
-          myAudioManager.resume();
+          myBaseAudioManager.resume();
         }
       } else {
-        await myAudioManager.playOtherSound(
+        await myBaseAudioManager.playOtherSound(
           audioFile,
           notificationTitle,
           appNoInternetMessage,
@@ -121,24 +121,24 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
   }
 
   play() async {
-    await myAudioManager.play();
+    await myBaseAudioManager.play();
   }
 
   pause() async {
-    await myAudioManager.pause();
+    await myBaseAudioManager.pause();
   }
 
 
   playNextSound() async {
-    await myAudioManager.skipToNext();
+    await myBaseAudioManager.skipToNext();
   }
 
   playPreviousSound() async {
-    await myAudioManager.skipToPrevious();
+    await myBaseAudioManager.skipToPrevious();
   }
 
   stopSound() async {
-    await myAudioManager.stop();
+    await myBaseAudioManager.stop();
   }
 
   void stopItemId(String id) async {
@@ -153,14 +153,14 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
       seek(Duration(milliseconds: value.toInt()));
 
   Future<void> seek(Duration duration) async {
-    await myAudioManager.seek(duration);
+    await myBaseAudioManager.seek(duration);
   }
 
   fastForward() async {
-    await myAudioManager.fastForward();
+    await myBaseAudioManager.fastForward();
   }
 
   Future<void> fastBackward() async {
-    await myAudioManager.rewind();
+    await myBaseAudioManager.rewind();
   }
 }

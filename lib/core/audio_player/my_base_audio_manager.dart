@@ -75,7 +75,7 @@ class MyBaseAudioManager extends AudioPlayerHandler {
     this.playerNotificationIconPath,
   ) {
     customLog('MyBaseAudioManager call base constructor');
-    audioUtil.myAudioManager = this;
+    audioUtil.myBaseAudioManager = this;
   }
 
   playOtherSound(
