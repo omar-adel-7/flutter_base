@@ -74,6 +74,7 @@ class MyBaseAudioManager extends AudioPlayerHandler {
     this.baseLocalDatabaseRepository,
     this.playerNotificationIconPath,
   ) {
+    customLog('MyBaseAudioManager call base constructor');
     audioUtil.myAudioManager = this;
   }
 
