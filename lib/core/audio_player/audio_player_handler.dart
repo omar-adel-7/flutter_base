@@ -12,6 +12,7 @@ import 'model/player_position.dart';
 
 /// An [AudioHandler] for playing a single item.
 class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
+  bool useNextAndPrevious=false;
   final audioPlayer = AudioPlayer();
 
   final ValueNotifier<AudioFile?> currentAudioFileNotifier = ValueNotifier(
@@ -129,6 +130,14 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     seek(seekDuration);
   }
 
+  @override
+  Future<void> skipToNext() {
+    return super.skipToNext();
+  }
+  @override
+  Future<void> skipToPrevious() {
+    return super.skipToPrevious();
+  }
   @override
   Future<void> stop() async {
     await audioPlayer.stop();
