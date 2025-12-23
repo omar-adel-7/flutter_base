@@ -1,9 +1,9 @@
-import 'package:flutter_base/core/audio_player/my_audio_manager.dart';
+import 'package:flutter_base/core/audio_player/my_base_audio_manager.dart';
 
 class AudioUtil {
 
   double speed = 1;
-  late MyAudioManager myAudioManager;
+  late MyBaseAudioManager myAudioManager;
 
   AudioUtil();
 

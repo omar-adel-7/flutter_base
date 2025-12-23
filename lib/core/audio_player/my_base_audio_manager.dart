@@ -32,7 +32,7 @@ Future<void> copyPlayerNotificationBigIconToAppFolder({
   }
 }
 
-Future<MyAudioManager> initAudioService(
+Future<MyBaseAudioManager> initAudioService(
   BaseLocalDatabaseRepository baseLocalDatabaseRepository, {
   String? assetsPath,
   required String playerNotificationIconPath,
@@ -44,7 +44,7 @@ Future<MyAudioManager> initAudioService(
   );
   return await AudioService.init(
     builder: () =>
-        MyAudioManager(baseLocalDatabaseRepository, playerNotificationIconPath),
+        MyBaseAudioManager(baseLocalDatabaseRepository, playerNotificationIconPath),
     config: AudioServiceConfig(
       preloadArtwork: true,
       androidNotificationChannelId:
@@ -59,7 +59,7 @@ Future<MyAudioManager> initAudioService(
   );
 }
 
-class MyAudioManager extends AudioPlayerHandler {
+class MyBaseAudioManager extends AudioPlayerHandler {
   String getPlayerNotificationBigIconPath() {
     return playerNotificationIconPath;
   }
@@ -70,7 +70,7 @@ class MyAudioManager extends AudioPlayerHandler {
 
   AudioUtil audioUtil = AudioUtil();
 
-  MyAudioManager(
+  MyBaseAudioManager(
     this.baseLocalDatabaseRepository,
     this.playerNotificationIconPath,
   ) {

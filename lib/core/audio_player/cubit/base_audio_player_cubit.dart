@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_base/BaseConfiguration.dart';
 import 'package:flutter_base/core/audio_player/model/audio_file.dart';
 import 'package:flutter_base/core/audio_player/model/my_player_state.dart';
 import 'package:flutter_base/core/audio_player/model/player_position.dart';
-import 'package:flutter_base/core/audio_player/my_audio_manager.dart';
+import 'package:flutter_base/core/audio_player/my_base_audio_manager.dart';
 import 'package:flutter_base/core/cache/base_hive_store.dart';
 import 'package:flutter_base/core/utils/base_app_utils.dart';
 import 'package:flutter_base/data/repositories/base_local_database_repository.dart';
@@ -22,7 +21,7 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
   }
 
   final BaseHiveStore baseHiveStore;
-  final MyAudioManager myAudioManager;
+  final MyBaseAudioManager myAudioManager;
   final BaseLocalDatabaseRepository baseLocalDatabaseRepository;
 
   int playSpeed = 1;
