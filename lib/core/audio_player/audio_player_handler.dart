@@ -12,7 +12,7 @@ import 'model/player_position.dart';
 
 /// An [AudioHandler] for playing a single item.
 class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
-  bool useNextAndPrevious=false;
+  bool useNextAndPrevious = false;
   final audioPlayer = AudioPlayer();
 
   final ValueNotifier<AudioFile?> currentAudioFileNotifier = ValueNotifier(
@@ -47,15 +47,23 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
         playbackState.add(
           playbackState.value.copyWith(
             controls: [
-              MediaControl.rewind,
+              useNextAndPrevious
+                  ? MediaControl.skipToPrevious
+                  : MediaControl.rewind,
               if (playing) MediaControl.pause else MediaControl.play,
               MediaControl.stop,
-              MediaControl.fastForward,
+              useNextAndPrevious
+                  ? MediaControl.skipToNext
+                  : MediaControl.fastForward,
             ],
-            systemActions: const {
+            systemActions: {
               MediaAction.seek,
-              MediaAction.seekForward,
-              MediaAction.seekBackward,
+              useNextAndPrevious
+                  ? MediaAction.skipToNext
+                  : MediaAction.seekForward,
+              useNextAndPrevious
+                  ? MediaAction.skipToPrevious
+                  : MediaAction.seekBackward,
             },
             androidCompactActionIndices: const [0, 1, 3],
             processingState: const {
@@ -134,10 +142,12 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   Future<void> skipToNext() {
     return super.skipToNext();
   }
+
   @override
   Future<void> skipToPrevious() {
     return super.skipToPrevious();
   }
+
   @override
   Future<void> stop() async {
     await audioPlayer.stop();
