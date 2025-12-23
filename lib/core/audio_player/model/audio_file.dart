@@ -1,5 +1,6 @@
 class AudioFile {
   final String id;
+  final String additionalInfo;
   final String title;
   final String sourcePath;
   final bool isLocal;
@@ -9,6 +10,7 @@ class AudioFile {
 
   AudioFile({
     required this.id,
+    this.additionalInfo='',
     required this.title,
     required this.sourcePath,
     required this.isLocal,
