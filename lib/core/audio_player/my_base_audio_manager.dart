@@ -155,12 +155,10 @@ class MyBaseAudioManager extends AudioPlayerHandler {
     await super.seek(position);
   }
 
-
   @override
   Future<void> stop() async {
     await super.stop();
   }
-
 
   @override
   Future<void> skipToNext() async {
@@ -190,28 +188,6 @@ class MyBaseAudioManager extends AudioPlayerHandler {
   void playPlayListMedia() async {
     await stop();
     playOtherSoundWork(audioFilesList[playIndex]);
-  }
-
-  void removePosition(int mediaIdToRemove, int position) {
-      if (playIndex >= 0) {
-        if (mediaIdToRemove== currentAudioFileNotifier.value?.id) {
-          playIndex = -1;
-        } else {
-          int indexRemove = 0;
-          for (int i = 0; i < audioFilesList.length; i++) {
-            if (audioFilesList[i].id == mediaIdToRemove) {
-              indexRemove = i;
-              break;
-            }
-          }
-          if (playIndex > indexRemove) {
-            playIndex--;
-          }
-        }
-      }
-      if (audioFilesList.length > position) {
-        audioFilesList.remove(position);
-    }
   }
 
   @override
