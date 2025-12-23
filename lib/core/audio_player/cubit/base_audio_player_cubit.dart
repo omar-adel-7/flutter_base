@@ -93,7 +93,7 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
     AudioFile audioFile,
     String appNotificationTitle,
     String appNoInternetMessage, {
-    List<AudioFile>? mediaList,
+    List<AudioFile>? audioFilesList,
     int? playIndex,
   }) async {
     customBaseLog(
@@ -111,7 +111,7 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
         audioFile,
         appNotificationTitle,
         appNoInternetMessage,
-        mediaList: mediaList,
+        audioFilesList: audioFilesList,
         playIndex: playIndex,
       );
     }

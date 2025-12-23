@@ -73,7 +73,7 @@ class MyBaseAudioManager extends AudioPlayerHandler {
   AudioUtil audioUtil = AudioUtil();
   String appNotificationTitle = '';
   String appNoInternetMessage = '';
-  List<AudioFile> mediaList = [];
+  List<AudioFile> audioFilesList = [];
   int playIndex = -1;
 
   MyBaseAudioManager(
@@ -88,14 +88,15 @@ class MyBaseAudioManager extends AudioPlayerHandler {
     AudioFile audioFile,
     String appNotificationTitle,
     String appNoInternetMessage, {
-    List<AudioFile>? mediaList,
+    List<AudioFile>? audioFilesList,
     int? playIndex,
   }) async {
     this.appNotificationTitle = appNotificationTitle;
     this.appNoInternetMessage = appNoInternetMessage;
     await stop();
-    if (mediaList != null) {
-      this.mediaList = mediaList;
+    if (audioFilesList != null) {
+      this.audioFilesList.clear();
+      this.audioFilesList.addAll(audioFilesList);
       if (playIndex != null) {
         this.playIndex = playIndex;
       }
@@ -157,8 +158,8 @@ class MyBaseAudioManager extends AudioPlayerHandler {
   @override
   Future<void> skipToNext() async {
     customLog('MyBaseAudioManager skipToNext');
-    if (mediaList.isNotEmpty) {
-      if (playIndex + 1 != mediaList.length) {
+    if (audioFilesList.isNotEmpty) {
+      if (playIndex + 1 != audioFilesList.length) {
         playIndex++;
       } else {
         playIndex = 0;
@@ -169,11 +170,11 @@ class MyBaseAudioManager extends AudioPlayerHandler {
 
   @override
   Future<void> skipToPrevious() async {
-    if (mediaList.isNotEmpty) {
+    if (audioFilesList.isNotEmpty) {
       if (playIndex - 1 >= 0) {
         playIndex--;
       } else {
-        playIndex = mediaList.length - 1;
+        playIndex = audioFilesList.length - 1;
       }
       playPlayListMedia();
     }
@@ -181,7 +182,7 @@ class MyBaseAudioManager extends AudioPlayerHandler {
 
   void playPlayListMedia() async {
     await stop();
-    playOtherSoundWork(mediaList[playIndex]);
+    playOtherSoundWork(audioFilesList[playIndex]);
   }
 
   @override
