@@ -139,16 +139,6 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   }
 
   @override
-  Future<void> skipToNext() {
-    return super.skipToNext();
-  }
-
-  @override
-  Future<void> skipToPrevious() {
-    return super.skipToPrevious();
-  }
-
-  @override
   Future<void> stop() async {
     await audioPlayer.stop();
     playerStateNotifier.value = MyPlayerState(false, MyProcessingState.idle);

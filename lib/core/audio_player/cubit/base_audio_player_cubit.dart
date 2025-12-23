@@ -128,6 +128,15 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
     await myAudioManager.pause();
   }
 
+
+  playNextSound() async {
+    await myAudioManager.skipToNext();
+  }
+
+  playPreviousSound() async {
+    await myAudioManager.skipToPrevious();
+  }
+
   stopSound() async {
     await myAudioManager.stop();
   }
