@@ -1,3 +1,5 @@
+import '../../utils/base_app_utils.dart';
+
 class AudioFile {
   final String id;
   final String additionalInfo;
@@ -20,4 +22,10 @@ class AudioFile {
     this.lastPosition = Duration.zero,
     this.totalDuration = Duration.zero,
   });
+
+  String get localPath => joinParts(destinationPath, fileName);
+
+  bool get isDownloaded {
+    return isFileExist(destinationDirPath: destinationPath, fileName: fileName);
+  }
 }
