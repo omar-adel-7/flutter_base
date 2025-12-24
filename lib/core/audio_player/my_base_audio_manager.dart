@@ -106,7 +106,7 @@ class MyBaseAudioManager extends AudioPlayerHandler {
 
   Future<void> playOtherSoundWork(AudioFile audioFile) async {
     bool hasNetwork = await hasRealInternet();
-    if (!audioFile.isLocal && !hasNetwork) {
+    if (!audioFile.isDownloaded && !hasNetwork) {
       ToastManger.showToast(this.appNoInternetMessage);
     } else {
       String artUri = getPlayerNotificationBigIconPath();
@@ -119,9 +119,9 @@ class MyBaseAudioManager extends AudioPlayerHandler {
           artUri: Uri.file(artUri),
         ),
       );
-      AudioSource audioSource = audioFile.isLocal
-          ? AudioSource.uri(Uri.file(audioFile.sourcePath), tag: mediaItemId)
-          : AudioSource.uri(Uri.parse(audioFile.sourcePath), tag: mediaItemId);
+      AudioSource audioSource = audioFile.isDownloaded
+          ? AudioSource.uri(Uri.file(audioFile.localPath), tag: mediaItemId)
+          : AudioSource.uri(Uri.parse(audioFile.link), tag: mediaItemId);
       try {
         await audioPlayer.setAudioSource(audioSource);
         currentAudioFileNotifier.value = audioFile;
