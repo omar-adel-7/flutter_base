@@ -2,8 +2,9 @@ class AudioFile {
   final String id;
   final String additionalInfo;
   final String title;
-  final String sourcePath;
-  final bool isLocal;
+  final String link;
+  final String destinationPath;
+  final String fileName;
   final Duration initPosition;
   final Duration lastPosition;
   final Duration totalDuration;
@@ -12,8 +13,9 @@ class AudioFile {
     required this.id,
     this.additionalInfo='',
     required this.title,
-    required this.sourcePath,
-    required this.isLocal,
+    required this.link,
+    required this.destinationPath,
+    required this.fileName,
     this.initPosition = Duration.zero,
     this.lastPosition = Duration.zero,
     this.totalDuration = Duration.zero,
