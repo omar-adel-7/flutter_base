@@ -97,7 +97,7 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
     int? playIndex,
   }) async {
     customBaseLog(
-      "playOtherSound audioFile sourcePath = ${audioFile.sourcePath}",
+      "playOtherSound audioFile link = ${audioFile.link} localPath = ${audioFile.localPath}",
     );
     if (audioFile.id == currentItemId) {
       if (isPlaying) {
