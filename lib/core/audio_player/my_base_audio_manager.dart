@@ -32,35 +32,6 @@ Future<void> copyPlayerNotificationBigIconToAppFolder({
   }
 }
 
-Future<MyBaseAudioManager> initAudioService(
-  BaseLocalDatabaseRepository baseLocalDatabaseRepository, {
-  String? assetsPath,
-  required String playerNotificationIconPath,
-  String? androidNotificationIcon,
-}) async {
-  await copyPlayerNotificationBigIconToAppFolder(
-    assetsPath: assetsPath,
-    playerNotificationIconPath: playerNotificationIconPath,
-  );
-  return await AudioService.init(
-    builder: () => MyBaseAudioManager(
-      baseLocalDatabaseRepository,
-      playerNotificationIconPath,
-    ),
-    config: AudioServiceConfig(
-      preloadArtwork: true,
-      androidNotificationChannelId:
-          BaseConfiguration().audioAndroidNotificationChannelId,
-      androidNotificationChannelName: 'audio',
-      notificationColor: const Color.fromARGB(255, 81, 102, 255),
-      androidNotificationOngoing: true,
-      androidStopForegroundOnPause: true,
-      androidNotificationIcon:
-          androidNotificationIcon ?? 'drawable/ic_stat_notifications',
-    ),
-  );
-}
-
 class MyBaseAudioManager extends AudioPlayerHandler {
   String getPlayerNotificationBigIconPath() {
     return playerNotificationIconPath;

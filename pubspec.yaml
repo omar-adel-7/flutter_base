@@ -13,10 +13,10 @@ dependencies:
   flutter:
     sdk: flutter
 
-  get_it: ^9.0.5
+  get_it: ^9.2.0
   flutter_bloc: ^9.1.1
   sqflite_sqlcipher: ^3.4.0
-  shared_preferences: ^2.5.3
+  shared_preferences: ^2.5.4
   hive_flutter: ^1.1.0
   rxdart: ^0.28.0
   just_audio: ^0.10.5
