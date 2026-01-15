@@ -26,6 +26,6 @@ class AudioFile {
   String get localPath => joinParts(destinationPath, fileName);
 
   bool get isDownloaded {
-    return isFileExist(destinationDirPath: destinationPath, fileName: fileName);
+    return isFileExist(destinationPath: destinationPath, fileName: fileName);
   }
 }

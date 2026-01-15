@@ -76,11 +76,11 @@ String replaceArabicNumber(String input) {
 }
 
 bool isFileExist({
-  required String destinationDirPath,
+  required String destinationPath,
   required String fileName,
 }) {
   return DownloaderPlugin.isFileExist(
-    destinationDirPath: destinationDirPath,
+    destinationPath: destinationPath,
     fileName: fileName,
   );
 }

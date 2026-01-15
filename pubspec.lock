@@ -126,7 +126,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: a52350a8d1042b1f4b9503cfd56360ca23c12309
+      resolved-ref: "992b56c0b479071953869d1cb534b3b86537e10f"
       url: "https://github.com/omar-adel-7/FlutterDownloader.git"
     source: git
     version: "0.0.1"
