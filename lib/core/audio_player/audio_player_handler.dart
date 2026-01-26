@@ -213,7 +213,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   }
 
   completedCallback() async {
-    seek(Duration.zero);
+    await seek(Duration.zero);
   }
 
   void currentIndexStreamCallback(int? currentIndex) {}

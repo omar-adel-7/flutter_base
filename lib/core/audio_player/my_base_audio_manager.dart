@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:audio_service/audio_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:flutter_base/BaseConfiguration.dart';
 import 'package:flutter_base/core/audio_player/audio_util.dart';
 import 'package:flutter_base/core/utils/FileUtils.dart';
 import 'package:flutter_base/core/utils/base_app_utils.dart';
@@ -163,8 +161,8 @@ class MyBaseAudioManager extends AudioPlayerHandler {
 
   @override
   completedCallback() async {
-    super.completedCallback();
-    await stop();
+      await super.completedCallback();
+      await stop();
   }
 
   @override
