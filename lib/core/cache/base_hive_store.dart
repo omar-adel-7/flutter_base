@@ -1,6 +1,6 @@
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_base/core/base_settings/data/language.dart';
 import 'package:flutter_base/core/utils/base_app_utils.dart';
+import 'package:hive_ce/hive.dart';
 
 class BaseHiveStore {
   final Box box;
