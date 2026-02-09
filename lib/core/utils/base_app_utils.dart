@@ -93,7 +93,7 @@ Future<bool> hasRealInternet() async {
   try {
     final response = await get(
       Uri.parse("https://clients3.google.com/generate_204"),
-    ).timeout(const Duration(milliseconds: 1500));
+    ).timeout(const Duration(milliseconds: 2500));
     return response.statusCode == 204;
   } catch (_) {
     return false;
