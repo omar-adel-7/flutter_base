@@ -74,36 +74,32 @@ class MyBaseAudioManager extends AudioPlayerHandler {
   }
 
   Future<void> playNormalSoundWork(AudioFile audioFile) async {
-    bool hasNetwork = await hasRealInternet();
-    if (!audioFile.isDownloaded && !hasNetwork) {
-      ToastManger.showToast(this.appNoInternetMessage);
-    } else {
-      String artUri = getPlayerNotificationBigIconPath();
-      String mediaItemId = audioFile.id;
-      mediaItem.add(
-        MediaItem(
-          id: mediaItemId,
-          album: this.appNotificationTitle,
-          title: audioFile.title,
-          artUri: Uri.file(artUri),
-        ),
-      );
-      AudioSource audioSource = audioFile.isDownloaded
-          ? AudioSource.uri(Uri.file(audioFile.localPath), tag: mediaItemId)
-          : AudioSource.uri(Uri.parse(audioFile.link), tag: mediaItemId);
-      try {
-        await audioPlayer.setAudioSource(audioSource);
+    String artUri = getPlayerNotificationBigIconPath();
+    String mediaItemId = audioFile.id;
+    mediaItem.add(
+      MediaItem(
+        id: mediaItemId,
+        album: this.appNotificationTitle,
+        title: audioFile.title,
+        artUri: Uri.file(artUri),
+      ),
+    );
+    AudioSource audioSource = audioFile.isDownloaded
+        ? AudioSource.uri(Uri.file(audioFile.localPath), tag: mediaItemId)
+        : AudioSource.uri(Uri.parse(audioFile.link), tag: mediaItemId);
+    try {
+      bool successSourceLoad = await setSourceOfAudio([audioSource]);
+      if(successSourceLoad){
         currentAudioFileNotifier.value = audioFile;
         play();
         await seek(
           Duration(milliseconds: audioFile.initPosition.inMilliseconds),
         );
-      } catch (e) {
-        customBaseLog('MyPlayerError occured: $e');
       }
+    } catch (e) {
+      customBaseLog('MyPlayerError occured: $e');
     }
   }
-
 
   Future<bool> setSourceOfAudio(List<AudioSource> audioSources) async {
     try {
