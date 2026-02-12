@@ -88,8 +88,8 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
         );
       },
       // Catching errors during playback (e.g. lost network connection) // tested and worked in case of invalid url
-      onError: (Object e, StackTrace st) async {
-        await stop();
+      onError: (Object e, StackTrace st) {
+        onErrorOfPlaybackEventStream(e,st);
       },
     );
 
@@ -107,7 +107,47 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   @override
   Future<void> play() async {
-    await audioPlayer.play();
+    // Catching errors at load time
+    try {
+      await audioPlayer.play();
+    } on PlayerException catch (e) {
+      // iOS/macOS: maps to NSError.code
+      // Android: maps to ExoPlayerException.type
+      // Web: maps to MediaError.code
+      // Linux/Windows: maps to PlayerErrorCode.index
+      customLog("playMethod Error code: ${e.code}");
+      // iOS/macOS: maps to NSError.localizedDescription
+      // Android: maps to ExoPlaybackException.getMessage()
+      // Web/Linux: a generic message
+      // Windows: MediaPlayerError.message
+      customLog("playMethod Error message: ${e.message}");
+      onError(e);
+    } on PlayerInterruptedException catch (e) {
+      // This call was interrupted since another audio source was loaded or the
+      // player was stopped or disposed before this audio source could complete
+      // loading.
+      customLog("playMethod Connection aborted: ${e.message}");
+      onError(e);
+    }  on Exception catch (e) {
+      // Fallback for all other errors
+      customLog('playMethod An error occured: $e');
+      onError(e);
+    }
+    // Listening to errors during playback (e.g. lost network connection)
+    audioPlayer.errorStream.listen((PlayerException e) {
+      customLog('playMethod errorStream Error code: ${e.code}');
+      customLog('playMethod errorStream Error message: ${e.message}');
+      customLog('playMethod errorStream AudioSource index: ${e.index}');
+      onError(e);
+    });
+  }
+
+  Future<void> onErrorOfPlaybackEventStream(Object e, StackTrace st) async {
+    await stop();
+  }
+
+  Future<void> onError(Exception exception) async {
+    await stop();
   }
 
   @override
