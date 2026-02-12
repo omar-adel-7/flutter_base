@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:flutter_base/core/utils/base_app_utils.dart';
 import 'package:rxdart/rxdart.dart';
+import 'audio_util.dart';
 import 'model/audio_file.dart';
 import 'model/my_player_state.dart';
 import 'model/my_processing_state.dart';
@@ -115,38 +116,58 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
       // Android: maps to ExoPlayerException.type
       // Web: maps to MediaError.code
       // Linux/Windows: maps to PlayerErrorCode.index
+      customLog("playMethod Error : $e");
       customLog("playMethod Error code: ${e.code}");
       // iOS/macOS: maps to NSError.localizedDescription
       // Android: maps to ExoPlaybackException.getMessage()
       // Web/Linux: a generic message
       // Windows: MediaPlayerError.message
       customLog("playMethod Error message: ${e.message}");
-      onError(e);
+      onError(e.code);
     } on PlayerInterruptedException catch (e) {
       // This call was interrupted since another audio source was loaded or the
       // player was stopped or disposed before this audio source could complete
       // loading.
-      customLog("playMethod Connection aborted: ${e.message}");
-      onError(e);
-    }  on Exception catch (e) {
+      customLog("playMethod Connection aborted error: $e");
+      customLog("playMethod Connection aborted error message: ${e.message}");
+      onError();
+    } on Exception catch (e) {
       // Fallback for all other errors
       customLog('playMethod An error occured: $e');
-      onError(e);
+      onError();
     }
     // Listening to errors during playback (e.g. lost network connection)
     audioPlayer.errorStream.listen((PlayerException e) {
+      customLog('playMethod errorStream Error: $e');
       customLog('playMethod errorStream Error code: ${e.code}');
       customLog('playMethod errorStream Error message: ${e.message}');
       customLog('playMethod errorStream AudioSource index: ${e.index}');
-      onError(e);
+      onError(e.code);
     });
   }
 
   Future<void> onErrorOfPlaybackEventStream(Object e, StackTrace st) async {
-    await stop();
+    customLog('onErrorOfPlaybackEventStream  e $e and StackTrace $st');
+    onError();
   }
 
-  Future<void> onError(Exception exception) async {
+  Future<void> onError([int? errorCode]) async {
+    if (errorCode == 0) {
+      if (audioPlayer.audioSource != null) {
+        bool isLocal = isAudioFromLocalClippingAudioSource(
+          audioPlayer.audioSource!,
+        );
+        if (isLocal) {
+          onShowPlayerErrorToUser(PlayerError.localSourceError);
+        } else {
+          onShowPlayerErrorToUser(PlayerError.remoteSourceError);
+        }
+      } else {
+        onShowPlayerErrorToUser(PlayerError.generalError);
+      }
+    } else {
+      onShowPlayerErrorToUser(PlayerError.generalError);
+    }
     await stop();
   }
 
@@ -271,4 +292,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   bool get isLoadingOrBuffering {
     return playerStateNotifier.value.isLoadingOrBuffering;
   }
+
+  void onShowPlayerErrorToUser(PlayerError playerError) {}
+
 }

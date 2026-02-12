@@ -53,7 +53,7 @@ class MyBaseAudioManager extends AudioPlayerHandler {
     audioUtil.myBaseAudioManager = this;
   }
 
-  playOtherSound(
+  playNormalSound(
     AudioFile audioFile,
     String appNotificationTitle,
     String appNoInternetMessage, {
@@ -70,10 +70,10 @@ class MyBaseAudioManager extends AudioPlayerHandler {
         this.playIndex = playIndex;
       }
     }
-    playOtherSoundWork(audioFile);
+    playNormalSoundWork(audioFile);
   }
 
-  Future<void> playOtherSoundWork(AudioFile audioFile) async {
+  Future<void> playNormalSoundWork(AudioFile audioFile) async {
     bool hasNetwork = await hasRealInternet();
     if (!audioFile.isDownloaded && !hasNetwork) {
       ToastManger.showToast(this.appNoInternetMessage);
@@ -102,6 +102,39 @@ class MyBaseAudioManager extends AudioPlayerHandler {
         customBaseLog('MyPlayerError occured: $e');
       }
     }
+  }
+
+
+  Future<bool> setSourceOfAudio(List<AudioSource> audioSources) async {
+    try {
+      await audioPlayer.setAudioSources(audioSources);
+      return true;
+    } on PlayerException catch (e) {
+      // iOS/macOS: maps to NSError.code
+      // Android: maps to ExoPlayerException.type
+      // Web: maps to MediaError.code
+      // Linux/Windows: maps to PlayerErrorCode.index
+      customLog("setSourceOfAudio Error : $e");
+      customLog("setSourceOfAudio Error code: ${e.code}");
+      // iOS/macOS: maps to NSError.localizedDescription
+      // Android: maps to ExoPlaybackException.getMessage()
+      // Web/Linux: a generic message
+      // Windows: MediaPlayerError.message
+      customLog("setSourceOfAudio Error message: ${e.message}");
+      onError(e.code);
+    } on PlayerInterruptedException catch (e) {
+      // This call was interrupted since another audio source was loaded or the
+      // player was stopped or disposed before this audio source could complete
+      // loading.
+      customLog("setSourceOfAudio Connection aborted error: $e");
+      customLog("setSourceOfAudio Connection aborted error message: ${e.message}");
+      onError();
+    }  on Exception catch (e) {
+      // Fallback for all other errors
+      customLog('setSourceOfAudio An error occured: $e');
+      onError();
+    }
+    return false;
   }
 
   @override
@@ -156,7 +189,7 @@ class MyBaseAudioManager extends AudioPlayerHandler {
 
   void playPlayListMedia() async {
     await stop();
-    playOtherSoundWork(audioFilesList[playIndex]);
+    playNormalSoundWork(audioFilesList[playIndex]);
   }
 
   @override

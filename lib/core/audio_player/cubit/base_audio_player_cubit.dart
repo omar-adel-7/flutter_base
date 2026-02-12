@@ -89,7 +89,7 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
 
   bool get isLoadingOrBuffering => myBaseAudioManager.isLoadingOrBuffering;
 
-  Future<void> playOtherSoundOrPauseOrStop(
+  Future<void> playNormalSoundOrPauseOrStop(
     AudioFile audioFile,
     String appNotificationTitle,
     String appNoInternetMessage, {
@@ -97,7 +97,7 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
     int? playIndex,
   }) async {
     customBaseLog(
-      "playOtherSound audioFile link = ${audioFile.link} localPath = ${audioFile.localPath}",
+      "playNormalSound audioFile link = ${audioFile.link} localPath = ${audioFile.localPath}",
     );
     if (audioFile.id == currentItemId) {
       if (isPlaying) {
@@ -107,7 +107,7 @@ abstract class BaseAudioPlayerCubit extends Cubit<AudioPlayerState> {
         myBaseAudioManager.resume();
       }
     } else {
-      await myBaseAudioManager.playOtherSound(
+      await myBaseAudioManager.playNormalSound(
         audioFile,
         appNotificationTitle,
         appNoInternetMessage,
