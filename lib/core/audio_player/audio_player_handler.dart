@@ -154,7 +154,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   Future<void> onError([int? errorCode]) async {
     if (errorCode == 0) {
       if (audioPlayer.audioSource != null) {
-        bool isLocal = isAudioFromLocalClippingAudioSource(
+        bool isLocal = isAudioFromLocalAudioSource(
           audioPlayer.audioSource!,
         );
         if (isLocal) {

@@ -31,13 +31,15 @@ bool isAudioFromLocalUrlSource(String urlSource) {
       !urlSource.startsWith('https://');
 }
 
-bool isAudioFromLocalClippingAudioSource(AudioSource source) {
+bool isAudioFromLocalAudioSource(AudioSource source) {
   Uri? uri;
-  if (source is ClippingAudioSource) {
+  if (source is UriAudioSource) {
+    uri = source.uri;
+  } else if (source is ClippingAudioSource) {
     final child = source.child;
     uri = child.uri;
   }
-  customLog('isAudioFromLocalSource uri?.scheme ${uri?.scheme}');
+
+  customLog('isAudioFromLocalAudioSource uri?.scheme ${uri?.scheme}');
   return uri?.scheme == 'file' || uri?.scheme == 'asset';
 }
-
