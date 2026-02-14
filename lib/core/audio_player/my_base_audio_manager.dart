@@ -73,31 +73,42 @@ class MyBaseAudioManager extends AudioPlayerHandler {
     playNormalSoundWork(audioFile);
   }
 
+
   Future<void> playNormalSoundWork(AudioFile audioFile) async {
-    String artUri = getPlayerNotificationBigIconPath();
-    String mediaItemId = audioFile.id;
-    mediaItem.add(
-      MediaItem(
-        id: mediaItemId,
-        album: this.appNotificationTitle,
-        title: audioFile.title,
-        artUri: Uri.file(artUri),
-      ),
-    );
-    AudioSource audioSource = audioFile.isDownloaded
-        ? AudioSource.uri(Uri.file(audioFile.localPath), tag: mediaItemId)
-        : AudioSource.uri(Uri.parse(audioFile.link), tag: mediaItemId);
-    try {
-      bool successSourceLoad = await setSourceOfAudio([audioSource]);
-      if(successSourceLoad){
-        currentAudioFileNotifier.value = audioFile;
-        play();
-        await seek(
-          Duration(milliseconds: audioFile.initPosition.inMilliseconds),
-        );
+    bool canPlay=true;
+    if (!audioFile.isDownloaded) {
+      bool hasNetwork = await hasInternetToUrl(audioFile.link);
+      if (!hasNetwork) {
+        canPlay=false;
+        ToastManger.showToast(this.appNoInternetMessage);
       }
-    } catch (e) {
-      customBaseLog('MyPlayerError occured: $e');
+    }
+    if(canPlay){
+      String artUri = getPlayerNotificationBigIconPath();
+      String mediaItemId = audioFile.id;
+      mediaItem.add(
+        MediaItem(
+          id: mediaItemId,
+          album: this.appNotificationTitle,
+          title: audioFile.title,
+          artUri: Uri.file(artUri),
+        ),
+      );
+      AudioSource audioSource = audioFile.isDownloaded
+          ? AudioSource.uri(Uri.file(audioFile.localPath), tag: mediaItemId)
+          : AudioSource.uri(Uri.parse(audioFile.link), tag: mediaItemId);
+      try {
+        bool successSourceLoad = await setSourceOfAudio([audioSource]);
+        if (successSourceLoad) {
+          currentAudioFileNotifier.value = audioFile;
+          play();
+          await seek(
+            Duration(milliseconds: audioFile.initPosition.inMilliseconds),
+          );
+        }
+      } catch (e) {
+        customBaseLog('MyPlayerError occured: $e');
+      }
     }
   }
 
