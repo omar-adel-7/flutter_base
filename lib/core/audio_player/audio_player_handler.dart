@@ -90,7 +90,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
       },
       // Catching errors during playback (e.g. lost network connection) // tested and worked in case of invalid url
       onError: (Object e, StackTrace st) {
-        onErrorOfPlaybackEventStream(e,st);
+        onErrorOfPlaybackEventStream(e, st);
       },
     );
 

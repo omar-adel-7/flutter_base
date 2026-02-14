@@ -134,9 +134,11 @@ class MyBaseAudioManager extends AudioPlayerHandler {
       // player was stopped or disposed before this audio source could complete
       // loading.
       customLog("setSourceOfAudio Connection aborted error: $e");
-      customLog("setSourceOfAudio Connection aborted error message: ${e.message}");
+      customLog(
+        "setSourceOfAudio Connection aborted error message: ${e.message}",
+      );
       onError();
-    }  on Exception catch (e) {
+    } on Exception catch (e) {
       // Fallback for all other errors
       customLog('setSourceOfAudio An error occured: $e');
       onError();
