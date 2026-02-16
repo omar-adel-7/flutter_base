@@ -108,7 +108,7 @@ Future<bool> hasInternetToUrl(String url) async {
         },
       ).timeout(const Duration(seconds: 3));
 
-      customLog('hasInternetToUrl response.statusCode >= 400  ${response.statusCode}');
+      customLog('hasInternetToUrl get response.statusCode >= 400  ${response.statusCode}');
     }
     customLog('hasInternetToUrl final response.statusCode ${response.statusCode}');
     // النجاح = السيرفر رد أصلاً
