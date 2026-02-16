@@ -93,28 +93,32 @@ bool isFileByArgsExist(DownloadArgs downloadArgs) {
 Future<bool> hasInternetToUrl(String url) async {
   try {
     final uri = Uri.parse(url);
-
-    var response = await
-    head(uri)
+    var response = await head(uri)
         .timeout(const Duration(seconds: 3));
+
     customLog('hasInternetToUrl head response.statusCode ${response.statusCode}');
-    // لو السيرفر لا يدعم HEAD
-    if (response.statusCode == 405) {
+
+    // لو السيرفر لا يدعم HEAD أو أعطى 4xx
+    if (response.statusCode >= 400) {
       response = await get(
         uri,
-        headers: {"Range": "bytes=0-0",// اطلب 1 byte فقط
-          "Connection": "close", // ✅ قفل الكونيكشن
+        headers: {
+          "Range": "bytes=0-0",
+          "Connection": "close",
         },
       ).timeout(const Duration(seconds: 3));
-    }
 
+      customLog('hasInternetToUrl response.statusCode >= 400  ${response.statusCode}');
+    }
     customLog('hasInternetToUrl final response.statusCode ${response.statusCode}');
-    return response.statusCode >= 200 && response.statusCode < 400;
+    // النجاح = السيرفر رد أصلاً
+    return response.statusCode < 500;
   } catch (e) {
     customLog('hasInternetToUrl catch exception $e');
     return false;
   }
 }
+
 
 Future<bool> hasInternetToFamousUrl() async {
   try {
